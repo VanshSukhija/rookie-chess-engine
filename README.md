@@ -1,5 +1,5 @@
 # Rook-ie: Chess Engine
-A UCI-compatible chess engine written in Java, featuring piece-centric board representation, fast move generation, and neural network-based position evaluation. Supports modern gameplay features and advanced search control.
+A 2200+ rated UCI-compatible chess engine written in Java, featuring piece-centric board representation, fast move generation, and neural network-based position evaluation. Supports modern gameplay features and advanced search control.
 
 ### Features
 - __Piece-centric board representation__: Efficient array/list-based storage for fast move generation and easy piece manipulation.
@@ -33,3 +33,13 @@ A UCI-compatible chess engine written in Java, featuring piece-centric board rep
 - __Search Algorithm__: Minimax with alpha-beta pruning. Search depth is dynamically adjusted depending on the game phase (opening, middlegame, endgame).
 - __Evaluation__: Upon reaching a leaf node, the Java engine imports neural network weights/biases (originally trained/exported from Python) and executes a forward pass to evaluate the position.
 - __UCI Integration__: Responds to all essential UCI commands, enabling compatibility with external chess GUIs.
+
+### Demo
+Rookie was White and I was Black.
+
+<img width="472" height="765" alt="Screenshot 2025-08-30 at 12 45 21 PM" src="https://github.com/user-attachments/assets/17a36d19-60ad-4231-8b24-d7b7bfc1c2a8" />
+
+
+https://github.com/user-attachments/assets/1d797b47-97df-4615-a0f7-b7b086837591
+
+
