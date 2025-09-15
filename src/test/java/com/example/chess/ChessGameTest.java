@@ -1,6 +1,9 @@
 package com.example.chess;
 
 import com.example.chess.model.*;
+import com.example.chess.neuralnetwork.NeuralNetwork;
+import com.example.chess.utils.Constants;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +39,7 @@ public class ChessGameTest {
 
     @Test
     public void testBoardFen() {
-        String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+        String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
         Board boardFromFen = setUp(fen, Color.WHITE);
         Board board = setUp(Color.WHITE);
 
@@ -44,7 +47,7 @@ public class ChessGameTest {
             assertEquals(board.getBoardRow(i).getRow(), boardFromFen.getBoardRow(i).getRow());
         }
 
-        assertEquals(board.getFEN(), fen.split(" ")[0]);
+        assertEquals(board.getFEN(), fen);
     }
 
     @Test
@@ -81,5 +84,32 @@ public class ChessGameTest {
     public void countMovesAtDepth6() {
         Board board = setUp(Color.WHITE);
         assertEquals(119060324, countLegalMoves(board, 6, 0));
+    }
+
+    @Test
+    public void predictionTest() {
+        NeuralNetwork nn = new NeuralNetwork("chess_nn_model.json");
+        String fen = "r1b2bnr/pp1p1kpp/2p5/8/8/2N1P3/PPP1P1PP/R2QKB1R b KQ -";
+        double prediction = nn.evaluate(fen);
+        System.out.println(prediction);
+    }
+
+    @Test
+    public void bestMoveTest() {
+        NeuralNetwork nn = new NeuralNetwork("chess_nn_model.json");
+        String fen = "2Q5/8/3R4/7P/4k3/B5K1/7r/8 b - -";
+        Board board = setUp(fen, Color.BLACK);
+        int depth = board.getDepthExtensionWithPhase(Constants.MAX_DEPTH_TO_SEARCH);
+        double cp = board.minimax(
+            depth,
+            nn,
+            board.getTurn() == Color.WHITE,
+            Double.NEGATIVE_INFINITY,
+            Double.POSITIVE_INFINITY
+        );
+        Move bestMove = board.getBestMove();
+        System.out.println(bestMove);
+        System.out.println(cp);
+        System.out.println(depth);
     }
 }

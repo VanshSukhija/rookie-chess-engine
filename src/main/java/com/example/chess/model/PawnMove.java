@@ -53,16 +53,16 @@ public class PawnMove extends Move {
         ;
     }
 
-    public static List<PawnMove> getPossibleMoves(BoardRow[] board, List<Move> moveHistory, int rank, byte file, boolean isEnPassantValid) {
+    public static List<PawnMove> getPossibleMoves(Board board, List<Move> moveHistory, int rank, byte file, boolean isEnPassantValid) {
         List<PawnMove> moves = new ArrayList<>();
         int[] direction = new int[]{1, -1};
-        Color color = board[rank].getColor(file);
+        Color color = board.getBoardRow(rank).getColor(file);
         int rankOffset = color == Color.WHITE ? 1 : -1;
         int firstRank = color == Color.WHITE ? 1 : 6;
         int lastRank = color == Color.WHITE ? 7 : 0;
         boolean wasFirstRank = rank == firstRank;
 
-        if(Utilities.isOnBoard(rank + rankOffset, file) && board[rank + rankOffset].isEmpty(file)) {
+        if(Utilities.isOnBoard(rank + rankOffset, file) && board.getBoardRow(rank + rankOffset).isEmpty(file)) {
             if(rank + rankOffset == lastRank) {
                 moves.add(new PawnMove(color, rank, file, rank + rankOffset, file, false, Pieces.QUEEN, false));
                 moves.add(new PawnMove(color, rank, file, rank + rankOffset, file, false, Pieces.BISHOP, false));
@@ -76,8 +76,8 @@ public class PawnMove extends Move {
         if(
             wasFirstRank &&
             Utilities.isOnBoard(rank + 2 * rankOffset, file) &&
-            board[rank + 2 * rankOffset].isEmpty(file) &&
-            board[rank + rankOffset].isEmpty(file)
+            board.getBoardRow(rank + 2 * rankOffset).isEmpty(file) &&
+            board.getBoardRow(rank + rankOffset).isEmpty(file)
         ) {
             moves.add(new PawnMove(color, rank, file, rank + 2 * rankOffset, file, false));
         }
@@ -85,8 +85,8 @@ public class PawnMove extends Move {
         for(int i = 0; i < 2; i++) {
             int newRank = rank + rankOffset;
             byte newFile = (byte) (file + direction[i]);
-            
-            if (Utilities.isOnBoard(newRank, newFile) && !board[newRank].isEmpty(newFile) && board[newRank].getColor(newFile) == color.opposite()) {
+
+            if (Utilities.isOnBoard(newRank, newFile) && !board.getBoardRow(newRank).isEmpty(newFile) && board.getBoardRow(newRank).getColor(newFile) == color.opposite()) {
                 if (newRank == lastRank) {
                     moves.add(new PawnMove(color, rank, file, newRank, newFile, true, Pieces.QUEEN, false));
                     moves.add(new PawnMove(color, rank, file, newRank, newFile, true, Pieces.BISHOP, false));
@@ -99,8 +99,8 @@ public class PawnMove extends Move {
             if (
                 isEnPassantValid &&
                 Utilities.isOnBoard(rank, newFile) &&
-                board[rank].getPiece(newFile) == Pieces.PAWN &&
-                board[rank].getColor(newFile) == color.opposite() &&
+                board.getBoardRow(rank).getPiece(newFile) == Pieces.PAWN &&
+                board.getBoardRow(rank).getColor(newFile) == color.opposite() &&
                 moveHistory.size() > 0 &&
                 moveHistory.getLast().getFromFile() == newFile &&
                 moveHistory.getLast().getToFile() == newFile &&

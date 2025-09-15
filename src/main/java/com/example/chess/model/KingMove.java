@@ -42,27 +42,27 @@ public class KingMove extends Move {
         return -1;
     }
 
-    public static List<KingMove> getPossibleMoves(BoardRow[] board, int rank, byte file) {
+    public static List<KingMove> getPossibleMoves(Board board, int rank, byte file) {
         List<KingMove> moves = new ArrayList<>();
-        Color color = board[rank].getColor(file);
+        Color color = board.getBoardRow(rank).getColor(file);
         int[][] directions = Pieces.KING.getDirections(color);
 
         for(int i = 0; i < 8; i++) {
             int newRank = rank + directions[i][0];
             byte newFile = (byte) (file + directions[i][1]);
             boolean isCapture = Utilities.isOnBoard(newRank, newFile) 
-                && !board[newRank].isEmpty(newFile) 
-                && board[newRank].getColor(newFile) == color.opposite();
+                && !board.getBoardRow(newRank).isEmpty(newFile) 
+                && board.getBoardRow(newRank).getColor(newFile) == color.opposite();
 
-            if(Utilities.isOnBoard(newRank, newFile) && (board[newRank].isEmpty(newFile) || isCapture)) {
+            if(Utilities.isOnBoard(newRank, newFile) && (board.getBoardRow(newRank).isEmpty(newFile) || isCapture)) {
                 moves.add(new KingMove(color, rank, file, newRank, newFile, isCapture));
             }
         }
 
-        if(Board.isKingSideCastleAvailable(color)) {
+        if(board.isKingSideCastleAvailable(color)) {
             moves.add(new KingMove(color, rank, file, rank, (byte) 6, false, kingSideCastleFile));
         }
-        if(Board.isQueenSideCastleAvailable(color)) {
+        if(board.isQueenSideCastleAvailable(color)) {
             moves.add(new KingMove(color, rank, file, rank, (byte) 2, false, queenSideCastleFile));
         }
 

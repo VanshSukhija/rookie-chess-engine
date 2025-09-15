@@ -1,5 +1,7 @@
 package com.example.chess.model;
 
+import java.util.List;
+
 public class Move {
     protected byte fromFile;
     protected int fromRank;
@@ -33,6 +35,10 @@ public class Move {
 
     public void setIsKingInCheck(boolean isKingInCheck) {
         this.isKingInCheck = isKingInCheck;
+    }
+
+    public boolean isKingInCheck() {
+        return isKingInCheck;
     }
 
     public void setIsCheckmate(boolean isCheckmate) {
@@ -83,6 +89,27 @@ public class Move {
 
     public static String squareToString(int rank, byte file) {
         return fileToString(file) + rankToString(rank);
+    }
+
+    public static Move uciStringToMove(String moveString, Board board) {
+        String[] moveTokens = moveString.split("");
+
+        byte fromFile = (byte) (moveTokens[0].charAt(0) - 'a');
+        int fromRank = Integer.parseInt(moveTokens[1]) - 1;
+        byte toFile = (byte) (moveTokens[2].charAt(0) - 'a');
+        int toRank = Integer.parseInt(moveTokens[3]) - 1;
+
+        Pieces boardPiece = board.getBoardRow(fromRank).getPiece(fromFile);
+        Color boardColor = board.getBoardRow(fromRank).getColor(fromFile);
+        Color color = board.getTurn();
+
+        if(boardPiece == Pieces.NONE || boardColor != color) {
+            return null;
+        }
+        
+        List<Move> possibleMoves = board.getLegalMoves(fromRank, fromFile);
+        Move move = possibleMoves.stream().filter(m -> m.getToFile() == toFile && m.getToRank() == toRank).findFirst().orElse(null);
+        return move;
     }
 
     public String toString(Pieces piece) {

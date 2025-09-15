@@ -10,9 +10,9 @@ public class KnightMove extends Move {
         super(color, Pieces.KNIGHT, fromRank, fromFile, toRank, toFile, isCapture);
     }
 
-    public static List<KnightMove> getPossibleMoves(BoardRow[] board, int rank, byte file) {
+    public static List<KnightMove> getPossibleMoves(Board board, int rank, byte file) {
         List<KnightMove> moves = new ArrayList<>();
-        Color color = board[rank].getColor(file);
+        Color color = board.getBoardRow(rank).getColor(file);
         int[][] direction = new int[][]{
             {2, 1}, {2, -1}, {1, 2}, {1, -2},
             {-2, 1}, {-2, -1}, {-1, 2}, {-1, -2}
@@ -21,8 +21,8 @@ public class KnightMove extends Move {
         for(int i = 0; i < 8; i++) {
             int newRank = rank + direction[i][0];
             byte newFile = (byte) (file + direction[i][1]);
-            boolean isCapture = Utilities.isOnBoard(newRank, newFile) && !board[newRank].isEmpty(newFile) && board[newRank].getColor(newFile) == color.opposite();
-            if(Utilities.isOnBoard(newRank, newFile) && (board[newRank].isEmpty(newFile) || isCapture)) {
+            boolean isCapture = Utilities.isOnBoard(newRank, newFile) && !board.getBoardRow(newRank).isEmpty(newFile) && board.getBoardRow(newRank).getColor(newFile) == color.opposite();
+            if(Utilities.isOnBoard(newRank, newFile) && (board.getBoardRow(newRank).isEmpty(newFile) || isCapture)) {
                 moves.add(new KnightMove(color, rank, file, newRank, newFile, isCapture));
             }
         }

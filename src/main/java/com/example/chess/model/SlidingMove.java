@@ -10,9 +10,9 @@ public class SlidingMove extends Move {
         super(color, pieces, fromRank, fromFile, toRank, toFile, isCapture);
     }
 
-    public static List<SlidingMove> getPossibleMoves(BoardRow[] board, int rank, byte file, Pieces piece) {
+    public static List<SlidingMove> getPossibleMoves(Board board, int rank, byte file, Pieces piece) {
         List<SlidingMove> moves = new ArrayList<>();
-        Color color = board[rank].getColor(file);
+        Color color = board.getBoardRow(rank).getColor(file);
         int[][] direction = piece.getDirections(color);
 
         for(int i = 0; i < direction.length; i++) {
@@ -21,10 +21,10 @@ public class SlidingMove extends Move {
                 byte newFile = (byte) (file + j * direction[i][1]);
                 boolean isCapture = 
                     Utilities.isOnBoard(newRank, newFile) &&
-                    !board[newRank].isEmpty(newFile) &&
-                    board[newRank].getColor(newFile) == color.opposite();
+                    !board.getBoardRow(newRank).isEmpty(newFile) &&
+                    board.getBoardRow(newRank).getColor(newFile) == color.opposite();
 
-                if(Utilities.isOnBoard(newRank, newFile) && board[newRank].isEmpty(newFile)) {
+                if(Utilities.isOnBoard(newRank, newFile) && board.getBoardRow(newRank).isEmpty(newFile)) {
                     moves.add(new SlidingMove(color, rank, file, newRank, newFile, isCapture, piece));
                 } else if (Utilities.isOnBoard(newRank, newFile) && isCapture) {
                     moves.add(new SlidingMove(color, rank, file, newRank, newFile, isCapture, piece));

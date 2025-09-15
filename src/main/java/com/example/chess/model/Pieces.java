@@ -33,4 +33,17 @@ public enum Pieces {
             default -> throw new IllegalArgumentException("Unexpected value: " + this);
         };
     }
+
+    public int getValue() {
+        return switch (this) {
+            case PAWN -> 100;
+            case KNIGHT -> 320;
+            case BISHOP -> 330;
+            case ROOK -> 500;
+            case QUEEN -> 900;
+            case KING -> 0;
+            case NONE -> 0;
+            default -> throw new IllegalArgumentException("Unexpected value: " + this);
+        };
+    }
 };
